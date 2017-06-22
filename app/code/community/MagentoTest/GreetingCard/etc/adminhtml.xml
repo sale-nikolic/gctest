@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagentoTest_GreetingCard extension
+ * 
+ * Magento Module for testing applicants.
+ * 
+ * @category       MagentoTest
+ * @package        MagentoTest_GreetingCard
+ * @copyright      Copyright (c) Company Inc.
+ */
+-->
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <magentotest_greetingcard translate="title" module="magentotest_greetingcard">
+                                        <title>GreetingCard</title>
+                                    </magentotest_greetingcard>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <customer>
+                        <children>
+                            <magentotest_greetingcard translate="title" module="magentotest_greetingcard">
+                                <title>Greeting Cards</title>
+                                <children>
+                                    <greetingcard translate="title" module="magentotest_greetingcard">
+                                        <title>Greeting Card</title>
+                                        <sort_order>0</sort_order>
+                                    </greetingcard>
+                                </children>
+                            </magentotest_greetingcard>
+                        </children>
+                    </customer>
+
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <customer>
+            <children>
+                <magentotest_greetingcard translate="title" module="magentotest_greetingcard">
+                    <title>Greeting Cards</title>
+                    <sort_order>55</sort_order>
+                    <children>
+                        <greetingcard translate="title" module="magentotest_greetingcard">
+                            <title>Greeting Card</title>
+                            <action>adminhtml/greetingcard_greetingcard</action>
+                            <sort_order>0</sort_order>
+                        </greetingcard>
+                    </children>
+                </magentotest_greetingcard>
+            </children>
+        </customer>
+
+    </menu>
+</config>

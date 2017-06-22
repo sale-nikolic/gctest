@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagentoTest_GreetingCard extension
+ * 
+ * Magento Module for testing applicants.
+ * 
+ * @category       MagentoTest
+ * @package        MagentoTest_GreetingCard
+ * @copyright      Copyright (c) Anders Innovations Ltd
+ */
+-->
+<config>
+    <modules>
+        <MagentoTest_GreetingCard>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Core />
+             </depends>
+        </MagentoTest_GreetingCard>
+    </modules>
+</config>

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagentoTest_GreetingCard extension
+ * 
+ * Magento Module for testing applicants.
+ * 
+ * @category       MagentoTest
+ * @package        MagentoTest_GreetingCard
+ * @copyright      Copyright (c) Company Inc.
+ */
+-->
+<config>
+    <modules>
+        <MagentoTest_GreetingCard>
+            <version>1.0.0</version>
+        </MagentoTest_GreetingCard>
+    </modules>
+    <global>
+        <resources>
+            <magentotest_greetingcard_setup>
+                <setup>
+                    <module>MagentoTest_GreetingCard</module>
+                    <class>MagentoTest_GreetingCard_Model_Resource_Setup</class>
+                </setup>
+            </magentotest_greetingcard_setup>
+        </resources>
+        <blocks>
+            <magentotest_greetingcard>
+                <class>MagentoTest_GreetingCard_Block</class>
+            </magentotest_greetingcard>
+        </blocks>
+        <helpers>
+            <magentotest_greetingcard>
+                <class>MagentoTest_GreetingCard_Helper</class>
+            </magentotest_greetingcard>
+        </helpers>
+        <models>
+            <magentotest_greetingcard>
+                <class>MagentoTest_GreetingCard_Model</class>
+                <resourceModel>magentotest_greetingcard_resource</resourceModel>
+            </magentotest_greetingcard>
+            <magentotest_greetingcard_resource>
+                <class>MagentoTest_GreetingCard_Model_Resource</class>
+                <entities>
+                    <greetingcard>
+                        <table>magentotest_greetingcard_greetingcard</table>
+                    </greetingcard>
+                    <greetingcard_store>
+                        <table>magentotest_greetingcard_greetingcard_store</table>
+                    </greetingcard_store>
+                </entities>
+            </magentotest_greetingcard_resource>
+        </models>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <magentotest_greetingcard>
+                    <file>magentotest_greetingcard.xml</file>
+                </magentotest_greetingcard>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <MagentoTest_GreetingCard>
+                    <files>
+                        <default>MagentoTest_GreetingCard.csv</default>
+                    </files>
+                </MagentoTest_GreetingCard>
+            </modules>
+        </translate>
+        <global_search>
+            <greetingcard>
+                <class>magentotest_greetingcard/adminhtml_search_greetingcard</class>
+                <acl>magentotest_greetingcard</acl>
+            </greetingcard>
+        </global_search>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <MagentoTest_GreetingCard before="Mage_Adminhtml">MagentoTest_GreetingCard_Adminhtml</MagentoTest_GreetingCard>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

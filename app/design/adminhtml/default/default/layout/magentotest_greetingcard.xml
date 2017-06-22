@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * MagentoTest_GreetingCard extension
+ * 
+ * Magento Module for testing applicants.
+ * 
+ * @category       MagentoTest
+ * @package        MagentoTest_GreetingCard
+ * @copyright      Copyright (c) Company Inc.
+ */
+--> 
+<layout>
+    <adminhtml_greetingcard_greetingcard_index>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>customer/magentotest_greetingcard/greetingcard</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="magentotest_greetingcard/adminhtml_greetingcard" name="greetingcard" />
+
+        </reference>
+    </adminhtml_greetingcard_greetingcard_index>
+    <adminhtml_greetingcard_greetingcard_grid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="magentotest_greetingcard/adminhtml_greetingcard_grid" name="greetingcard_grid"/>
+        </block>
+    </adminhtml_greetingcard_greetingcard_grid>
+    <!-- Greetingcard add/edit action -->
+    <adminhtml_greetingcard_greetingcard_edit>
+        <update handle="editor"/>
+        <reference name="menu">
+            <action method="setActive">
+                <menupath>customer/magentotest_greetingcard/greetingcard</menupath>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="magentotest_greetingcard/adminhtml_greetingcard_edit" name="greetingcard_edit"></block>
+        </reference>
+        <reference name="left">
+            <block type="magentotest_greetingcard/adminhtml_greetingcard_edit_tabs" name="greetingcard_tabs"></block>
+        </reference>
+    </adminhtml_greetingcard_greetingcard_edit>
+
+</layout>
