@@ -38,42 +38,58 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      * Collects customers based on order value
      */
     public function collectAction() {
-        $customerValue = array();
-        $orders = Mage::getModel("sales/order")->getCollection();
-        foreach($orders as $order) {
-            $order = $order->load($order->getId());
-            $customer = Mage::getModel("customer/customer")->setWebsiteId(1)->loadByEmail($order->getCustomerEmail());
-            $existsInArray = false;
-            foreach($customerValue as $customerEmail => $totalValue) {
-                if($customerEmail == $order->getCustomerEmail()) {
-                    $existsInArray = true;
-                }
-            }
-            if(!$existsInArray)
-                $customerValue[$order->getCustomerEmail()] = 0;
-            $customerValue[$customer->getEmail()] += $order->getGrandTotal();
-        }
-
         // clear old values from database
         $collection = Mage::getModel("magentotest_greetingcard/greetingcard")->getCollection();
         foreach($collection as $item) {
             $item->delete();
         }
+        $customerValue = array();
+        $collection = Mage::getResourceModel('customer/customer_collection');
+        $collection->joinTable(
+            array('orders' => 'sales_flat_order'), 'customer_id=entity_id',
+            array('base_grand_total' => 'base_grand_total')
+        )
+            ->getSelect()
+            ->reset(Zend_DB_Select::COLUMNS)
+            ->columns(array(
+                'grand_total' => 'SUM(base_grand_total)',
+                'email' => 'email',
+                'stores' => 'GROUP_CONCAT(DISTINCT orders.store_id , ",")'))
+            ->group('e.entity_id');
+        foreach($collection as $customer){
+            $customerValue[$customer->getEmail()] = array('total' => $customer->getGrandTotal(), 'stores' => $customer->getStores());
+        }
+        $write_adapter =Mage::getSingleton('core/resource')->getConnection('core_write');
         // save to database based on values
         foreach($customerValue as $email => $totalValue) {
             $reason = null;
-            if($totalValue > 2000)
+            if($totalValue['total'] > 2000)
                 $reason = 1;
-            if($totalValue > 1000)
+            elseif($totalValue['total'] > 1000)
                 $reason = 2;
-            if($totalValue > 500)
+            elseif($totalValue['total'] > 500)
                 $reason = 3;
             if(!$reason)
                 continue;
+            //save card
             $item = Mage::getModel("magentotest_greetingcard/greetingcard");
             $item->setData("customer_email", $email);
             $item->setData("reason", $reason);
             $item->save();
+            //save card(customer) stores
+            $table  = Mage::getSingleton('core/resource')->getTableName('magentotest_greetingcard/greetingcard_store');
+            $store = strtok($totalValue['stores'], ',');
+            $data = [];
+            while ($store != false) {
+                $data[] = array(
+                    'greetingcard_id'  => (int) $item->getId(),
+                    'store_id' => (int) $store
+                );
+                $store = strtok(",");
+            }
+            if(!empty($data))
+                $write_adapter->insertMultiple($table, $data);
+
         }
 
         $this->_redirect("*/*/");
