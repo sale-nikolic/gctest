@@ -58,12 +58,10 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
                 'email' => 'email',
                 'stores' => 'GROUP_CONCAT(DISTINCT orders.store_id , ",")'))
             ->group('e.entity_id');
-        foreach ($collection as $customer) {
-            $customerValue[$customer->getEmail()] = array('total' => $customer->getGrandTotal(), 'stores' => $customer->getStores());
-        }
         $write_adapter = Mage::getSingleton('core/resource')->getConnection('core_write');
         // save to database based on values
-        foreach ($customerValue as $email => $totalValue) {
+        foreach ($collection as $customer) {
+            $totalValue = array('total' => $customer->getGrandTotal(), 'stores' => $customer->getStores());
             $reason = null;
             if ($totalValue['total'] > 2000)
                 $reason = 1;
@@ -75,7 +73,7 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
                 continue;
             //save card
             $item = Mage::getModel("magentotest_greetingcard/greetingcard");
-            $item->setData("customer_email", $email);
+            $item->setData("customer_email", $customer->getEmail());
             $item->setData("reason", $reason);
             $item->save();
             //save customer order stores
@@ -109,6 +107,9 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
                 $mail->send();
                 $item->delete();
             } catch (Exception $error) {
+                Mage::getSingleton("adminhtml/session")->addError(
+                    Mage::helper("magentotest_greetingcard")->__("There was an error sending greeting card (s).")
+                );
                 Mage::log($error->getMessage(), null, 'greeting_card_emails.log');
                 continue;
             }
@@ -199,6 +200,9 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
                 Mage::helper("magentotest_greetingcard")->__("Greeting card was successfully sent.", count($greetingcardIds))
             );
         } catch (Exception $error) {
+            Mage::getSingleton("adminhtml/session")->addError(
+                Mage::helper("magentotest_greetingcard")->__("There was an error sending greeting card.")
+            );
             Mage::log($error->getMessage(), null, 'greeting_card_emails.log');
         }
         $this->_redirect("*/*/");
@@ -320,6 +324,9 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
                         $mail->send();
                         $gc->delete();
                     } catch (Exception $error) {
+                        Mage::getSingleton("adminhtml/session")->addError(
+                            Mage::helper("magentotest_greetingcard")->__("There was an error sending greeting card (s).")
+                        );
                         Mage::log($error->getMessage(), null, 'greeting_card_emails.log');
                         continue;
                     }
