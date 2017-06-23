@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * Admin source model for Reason
  *
@@ -28,7 +29,7 @@ class MagentoTest_GreetingCard_Model_Greetingcard_Attribute_Source_Reason extend
      */
     public function getAllOptions($withEmpty = true, $defaultValues = false)
     {
-        $options =  array(
+        $options = array(
             array(
                 'label' => Mage::helper('magentotest_greetingcard')->__('Platinum Customer (Over 2000 USD ordered)'),
                 'value' => 1
@@ -43,7 +44,7 @@ class MagentoTest_GreetingCard_Model_Greetingcard_Attribute_Source_Reason extend
             ),
         );
         if ($withEmpty) {
-            array_unshift($options, array('label'=>'', 'value'=>''));
+            array_unshift($options, array('label' => '', 'value' => ''));
         }
         return $options;
 

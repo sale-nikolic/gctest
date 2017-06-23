@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * store selection tab
  *
@@ -37,11 +38,11 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Edit_Tab_Stores exte
             'store_id',
             'multiselect',
             array(
-                'name'     => 'stores[]',
-                'label'    => Mage::helper('magentotest_greetingcard')->__('Store Views'),
-                'title'    => Mage::helper('magentotest_greetingcard')->__('Store Views'),
+                'name' => 'stores[]',
+                'label' => Mage::helper('magentotest_greetingcard')->__('Store Views'),
+                'title' => Mage::helper('magentotest_greetingcard')->__('Store Views'),
                 'required' => true,
-                'values'   => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, true),
+                'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, true),
             )
         );
         $renderer = $this->getLayout()->createBlock('adminhtml/store_switcher_form_renderer_fieldset_element');

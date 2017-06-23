@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * Greeting Card admin edit form
  *
@@ -42,9 +43,9 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Edit extends Mage_Ad
         $this->_addButton(
             'saveandcontinue',
             array(
-                'label'   => Mage::helper('magentotest_greetingcard')->__('Save And Continue Edit'),
+                'label' => Mage::helper('magentotest_greetingcard')->__('Save And Continue Edit'),
                 'onclick' => 'saveAndContinueEdit()',
-                'class'   => 'save',
+                'class' => 'save',
             ),
             -100
         );

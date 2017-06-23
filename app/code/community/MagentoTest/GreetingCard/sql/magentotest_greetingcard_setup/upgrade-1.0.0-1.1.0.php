@@ -1,9 +1,9 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Anders Innovations Ltd

@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Anders Innovations Ltd
  */
+
 /**
  * Greeting Card resource model
  *
@@ -40,7 +41,7 @@ class MagentoTest_GreetingCard_Model_Resource_Greetingcard extends Mage_Core_Mod
     public function lookupStoreIds($greetingcardId)
     {
         $adapter = $this->_getReadAdapter();
-        $select  = $adapter->select()
+        $select = $adapter->select()
             ->from($this->getTable('magentotest_greetingcard/greetingcard_store'), 'store_id')
             ->where('greetingcard_id = ?', (int)$greetingcardId);
         return $adapter->fetchCol($select);
@@ -81,9 +82,9 @@ class MagentoTest_GreetingCard_Model_Resource_Greetingcard extends Mage_Core_Mod
                 $this->getMainTable() . '.entity_id = greetingcard_greetingcard_store.greetingcard_id',
                 array()
             )
-            ->where('greetingcard_greetingcard_store.store_id IN (?)', $storeIds)
-            ->order('greetingcard_greetingcard_store.store_id DESC')
-            ->limit(1);
+                ->where('greetingcard_greetingcard_store.store_id IN (?)', $storeIds)
+                ->order('greetingcard_greetingcard_store.store_id DESC')
+                ->limit(1);
         }
         return $select;
     }
@@ -103,12 +104,12 @@ class MagentoTest_GreetingCard_Model_Resource_Greetingcard extends Mage_Core_Mod
         if (empty($newStores)) {
             $newStores = (array)$object->getStoreId();
         }
-        $table  = $this->getTable('magentotest_greetingcard/greetingcard_store');
+        $table = $this->getTable('magentotest_greetingcard/greetingcard_store');
         $insert = array_diff($newStores, $oldStores);
         $delete = array_diff($oldStores, $newStores);
         if ($delete) {
             $where = array(
-                'greetingcard_id = ?' => (int) $object->getId(),
+                'greetingcard_id = ?' => (int)$object->getId(),
                 'store_id IN (?)' => $delete
             );
             $this->_getWriteAdapter()->delete($table, $where);
@@ -117,8 +118,8 @@ class MagentoTest_GreetingCard_Model_Resource_Greetingcard extends Mage_Core_Mod
             $data = array();
             foreach ($insert as $storeId) {
                 $data[] = array(
-                    'greetingcard_id'  => (int) $object->getId(),
-                    'store_id' => (int) $storeId
+                    'greetingcard_id' => (int)$object->getId(),
+                    'store_id' => (int)$storeId
                 );
             }
             $this->_getWriteAdapter()->insertMultiple($table, $data);

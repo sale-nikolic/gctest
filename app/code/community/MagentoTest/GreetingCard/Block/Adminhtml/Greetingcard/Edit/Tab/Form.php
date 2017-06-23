@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * Greeting Card edit form tab
  *
@@ -39,11 +40,11 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Edit_Tab_Form extend
             'text',
             array(
                 'label' => Mage::helper('magentotest_greetingcard')->__('Customer Email'),
-                'name'  => 'customer_email',
-                'required'  => true,
+                'name' => 'customer_email',
+                'required' => true,
                 'class' => 'required-entry',
 
-           )
+            )
         );
 
         $fieldset->addField(
@@ -51,19 +52,19 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Edit_Tab_Form extend
             'select',
             array(
                 'label' => Mage::helper('magentotest_greetingcard')->__('Reason'),
-                'name'  => 'reason',
-                'required'  => true,
+                'name' => 'reason',
+                'required' => true,
                 'class' => 'required-entry',
 
-                'values'=> Mage::getModel('magentotest_greetingcard/greetingcard_attribute_source_reason')->getAllOptions(true),
-           )
+                'values' => Mage::getModel('magentotest_greetingcard/greetingcard_attribute_source_reason')->getAllOptions(true),
+            )
         );
         $fieldset->addField(
             'status',
             'select',
             array(
-                'label'  => Mage::helper('magentotest_greetingcard')->__('Status'),
-                'name'   => 'status',
+                'label' => Mage::helper('magentotest_greetingcard')->__('Status'),
+                'name' => 'status',
                 'values' => array(
                     array(
                         'value' => 1,
@@ -81,8 +82,8 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Edit_Tab_Form extend
                 'store_id',
                 'hidden',
                 array(
-                    'name'      => 'stores[]',
-                    'value'     => Mage::app()->getStore(true)->getId()
+                    'name' => 'stores[]',
+                    'value' => Mage::app()->getStore(true)->getId()
                 )
             );
             Mage::registry('current_greetingcard')->setStoreId(Mage::app()->getStore(true)->getId());

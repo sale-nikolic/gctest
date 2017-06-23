@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * Greeting Card admin grid block
  *
@@ -70,9 +71,9 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
         $this->addColumn(
             'customer_email',
             array(
-                'header'    => Mage::helper('magentotest_greetingcard')->__('Customer Email'),
-                'align'     => 'left',
-                'index'     => 'customer_email',
+                'header' => Mage::helper('magentotest_greetingcard')->__('Customer Email'),
+                'align' => 'left',
+                'index' => 'customer_email',
             )
         );
 
@@ -80,8 +81,8 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
             'reason',
             array(
                 'header' => Mage::helper('magentotest_greetingcard')->__('Reason'),
-                'index'  => 'reason',
-                'type'  => 'options',
+                'index' => 'reason',
+                'type' => 'options',
                 'options' => Mage::helper('magentotest_greetingcard')->convertOptions(
                     Mage::getModel('magentotest_greetingcard/greetingcard_attribute_source_reason')->getAllOptions(false)
                 )
@@ -92,43 +93,43 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
             $this->addColumn(
                 'store_id',
                 array(
-                    'header'     => Mage::helper('magentotest_greetingcard')->__('Store Views'),
-                    'index'      => 'store_id',
-                    'type'       => 'store',
-                    'store_all'  => true,
+                    'header' => Mage::helper('magentotest_greetingcard')->__('Store Views'),
+                    'index' => 'store_id',
+                    'type' => 'store',
+                    'store_all' => true,
                     'store_view' => true,
-                    'sortable'   => false,
-                    'filter_condition_callback'=> array($this, '_filterStoreCondition'),
+                    'sortable' => false,
+                    'filter_condition_callback' => array($this, '_filterStoreCondition'),
                 )
             );
         }
         $this->addColumn(
             'action',
             array(
-                'header'  =>  Mage::helper('magentotest_greetingcard')->__('Action'),
-                'width'   => '100',
-                'type'    => 'action',
-                'getter'  => 'getId',
+                'header' => Mage::helper('magentotest_greetingcard')->__('Action'),
+                'width' => '100',
+                'type' => 'action',
+                'getter' => 'getId',
                 'actions' => array(
                     array(
                         'caption' => Mage::helper('magentotest_greetingcard')->__('Edit'),
-                        'url'     => array('base'=> '*/*/edit'),
-                        'field'   => 'id'
+                        'url' => array('base' => '*/*/edit'),
+                        'field' => 'id'
                     ),
                     array(
                         'caption' => Mage::helper('magentotest_greetingcard')->__('Delete'),
-                        'url'     => array('base'=> '*/*/delete'),
-                        'field'   => 'id'
+                        'url' => array('base' => '*/*/delete'),
+                        'field' => 'id'
                     ),
                     array(
                         'caption' => Mage::helper('magentotest_greetingcard')->__('Send'),
-                        'url'     => array('base'=> '*/*/sendSingle'),
-                        'field'   => 'id'
+                        'url' => array('base' => '*/*/sendSingle'),
+                        'field' => 'id'
                     )
                 ),
-                'filter'    => false,
+                'filter' => false,
                 'is_system' => true,
-                'sortable'  => false,
+                'sortable' => false,
             )
         );
         $this->addExportType('*/*/exportCsv', Mage::helper('magentotest_greetingcard')->__('CSV'));
@@ -151,30 +152,30 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
         $this->getMassactionBlock()->addItem(
             'send',
             array(
-                'label'=> Mage::helper('magentotest_greetingcard')->__('Send'),
-                'url'  => $this->getUrl('*/*/massSend')
+                'label' => Mage::helper('magentotest_greetingcard')->__('Send'),
+                'url' => $this->getUrl('*/*/massSend')
             )
         );
         $this->getMassactionBlock()->addItem(
             'delete',
             array(
-                'label'=> Mage::helper('magentotest_greetingcard')->__('Delete'),
-                'url'  => $this->getUrl('*/*/massDelete'),
-                'confirm'  => Mage::helper('magentotest_greetingcard')->__('Are you sure?')
+                'label' => Mage::helper('magentotest_greetingcard')->__('Delete'),
+                'url' => $this->getUrl('*/*/massDelete'),
+                'confirm' => Mage::helper('magentotest_greetingcard')->__('Are you sure?')
             )
         );
 
         $this->getMassactionBlock()->addItem(
             'status',
             array(
-                'label'      => Mage::helper('magentotest_greetingcard')->__('Change status'),
-                'url'        => $this->getUrl('*/*/massStatus', array('_current'=>true)),
+                'label' => Mage::helper('magentotest_greetingcard')->__('Change status'),
+                'url' => $this->getUrl('*/*/massStatus', array('_current' => true)),
                 'additional' => array(
                     'status' => array(
-                        'name'   => 'status',
-                        'type'   => 'select',
-                        'class'  => 'required-entry',
-                        'label'  => Mage::helper('magentotest_greetingcard')->__('Status'),
+                        'name' => 'status',
+                        'type' => 'select',
+                        'class' => 'required-entry',
+                        'label' => Mage::helper('magentotest_greetingcard')->__('Status'),
                         'values' => array(
                             '1' => Mage::helper('magentotest_greetingcard')->__('Enabled'),
                             '0' => Mage::helper('magentotest_greetingcard')->__('Disabled'),
@@ -186,14 +187,14 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
         $this->getMassactionBlock()->addItem(
             'reason',
             array(
-                'label'      => Mage::helper('magentotest_greetingcard')->__('Change Reason'),
-                'url'        => $this->getUrl('*/*/massReason', array('_current'=>true)),
+                'label' => Mage::helper('magentotest_greetingcard')->__('Change Reason'),
+                'url' => $this->getUrl('*/*/massReason', array('_current' => true)),
                 'additional' => array(
                     'flag_reason' => array(
-                        'name'   => 'flag_reason',
-                        'type'   => 'select',
-                        'class'  => 'required-entry',
-                        'label'  => Mage::helper('magentotest_greetingcard')->__('Reason'),
+                        'name' => 'flag_reason',
+                        'type' => 'select',
+                        'class' => 'required-entry',
+                        'label' => Mage::helper('magentotest_greetingcard')->__('Reason'),
                         'values' => Mage::getModel('magentotest_greetingcard/greetingcard_attribute_source_reason')
                             ->getAllOptions(true),
 
@@ -226,7 +227,7 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/grid', array('_current'=>true));
+        return $this->getUrl('*/*/grid', array('_current' => true));
     }
 
     /**

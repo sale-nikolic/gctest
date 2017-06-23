@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * Greeting Card admin controller
  *
@@ -25,8 +26,8 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      */
     protected function _initGreetingcard()
     {
-        $greetingcardId  = (int) $this->getRequest()->getParam("id");
-        $greetingcard    = Mage::getModel("magentotest_greetingcard/greetingcard");
+        $greetingcardId = (int)$this->getRequest()->getParam("id");
+        $greetingcard = Mage::getModel("magentotest_greetingcard/greetingcard");
         if ($greetingcardId) {
             $greetingcard->load($greetingcardId);
         }
@@ -37,10 +38,11 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
     /**
      * Collects customers based on order value
      */
-    public function collectAction() {
+    public function collectAction()
+    {
         // clear old values from database
         $collection = Mage::getModel("magentotest_greetingcard/greetingcard")->getCollection();
-        foreach($collection as $item) {
+        foreach ($collection as $item) {
             $item->delete();
         }
         $customerValue = array();
@@ -56,20 +58,20 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
                 'email' => 'email',
                 'stores' => 'GROUP_CONCAT(DISTINCT orders.store_id , ",")'))
             ->group('e.entity_id');
-        foreach($collection as $customer){
+        foreach ($collection as $customer) {
             $customerValue[$customer->getEmail()] = array('total' => $customer->getGrandTotal(), 'stores' => $customer->getStores());
         }
         $write_adapter = Mage::getSingleton('core/resource')->getConnection('core_write');
         // save to database based on values
-        foreach($customerValue as $email => $totalValue) {
+        foreach ($customerValue as $email => $totalValue) {
             $reason = null;
-            if($totalValue['total'] > 2000)
+            if ($totalValue['total'] > 2000)
                 $reason = 1;
-            elseif($totalValue['total'] > 1000)
+            elseif ($totalValue['total'] > 1000)
                 $reason = 2;
-            elseif($totalValue['total'] > 500)
+            elseif ($totalValue['total'] > 500)
                 $reason = 3;
-            if(!$reason)
+            if (!$reason)
                 continue;
             //save card
             $item = Mage::getModel("magentotest_greetingcard/greetingcard");
@@ -77,17 +79,17 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
             $item->setData("reason", $reason);
             $item->save();
             //save customer order stores
-            $table  = Mage::getSingleton('core/resource')->getTableName('magentotest_greetingcard/greetingcard_store');
+            $table = Mage::getSingleton('core/resource')->getTableName('magentotest_greetingcard/greetingcard_store');
             $store = strtok($totalValue['stores'], ',');
             $data = [];
             while ($store != false) {
                 $data[] = array(
-                    'greetingcard_id'  => (int) $item->getId(),
-                    'store_id' => (int) $store
+                    'greetingcard_id' => (int)$item->getId(),
+                    'store_id' => (int)$store
                 );
                 $store = strtok(",");
             }
-            if(!empty($data))
+            if (!empty($data))
                 $write_adapter->insertMultiple($table, $data);
 
         }
@@ -98,9 +100,10 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
     /**
      * Send action
      */
-    public function sendAction() {
+    public function sendAction()
+    {
         $collection = Mage::getModel("magentotest_greetingcard/greetingcard")->getCollection();
-        foreach($collection as $item) {
+        foreach ($collection as $item) {
             $mail = $this->_prepareEmail($item);
             try {
                 $mail->send();
@@ -124,7 +127,7 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
     {
         $this->loadLayout();
         $this->_title(Mage::helper("magentotest_greetingcard")->__("Greeting Cards"))
-             ->_title(Mage::helper("magentotest_greetingcard")->__("Greeting Cards"));
+            ->_title(Mage::helper("magentotest_greetingcard")->__("Greeting Cards"));
         $this->renderLayout();
     }
 
@@ -149,8 +152,8 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      */
     public function editAction()
     {
-        $greetingcardId    = $this->getRequest()->getParam("id");
-        $greetingcard      = $this->_initGreetingcard();
+        $greetingcardId = $this->getRequest()->getParam("id");
+        $greetingcard = $this->_initGreetingcard();
         if ($greetingcardId && !$greetingcard->getId()) {
             $this->_getSession()->addError(
                 Mage::helper("magentotest_greetingcard")->__("This greeting card no longer exists.")
@@ -165,7 +168,7 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
         Mage::register("greetingcard_data", $greetingcard);
         $this->loadLayout();
         $this->_title(Mage::helper("magentotest_greetingcard")->__("Greeting Cards"))
-             ->_title(Mage::helper("magentotest_greetingcard")->__("Greeting Cards"));
+            ->_title(Mage::helper("magentotest_greetingcard")->__("Greeting Cards"));
         if ($greetingcard->getId()) {
             $this->_title($greetingcard->getCustomerEmail());
         } else {
@@ -186,7 +189,7 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      */
     public function sendSingleAction()
     {
-        $greetingcardId    = $this->getRequest()->getParam("id");
+        $greetingcardId = $this->getRequest()->getParam("id");
         $gc = Mage::getModel("magentotest_greetingcard/greetingcard")->load($greetingcardId);
         $mail = $this->_prepareEmail($gc);
         try {
@@ -267,7 +270,7 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      */
     public function deleteAction()
     {
-        if ( $this->getRequest()->getParam("id") > 0) {
+        if ($this->getRequest()->getParam("id") > 0) {
             try {
                 $greetingcard = Mage::getModel("magentotest_greetingcard/greetingcard");
                 $greetingcard->setId($this->getRequest()->getParam("id"))->delete();
@@ -388,10 +391,10 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
         } else {
             try {
                 foreach ($greetingcardIds as $greetingcardId) {
-                $greetingcard = Mage::getSingleton("magentotest_greetingcard/greetingcard")->load($greetingcardId)
-                            ->setStatus($this->getRequest()->getParam("status"))
-                            ->setIsMassupdate(true)
-                            ->save();
+                    $greetingcard = Mage::getSingleton("magentotest_greetingcard/greetingcard")->load($greetingcardId)
+                        ->setStatus($this->getRequest()->getParam("status"))
+                        ->setIsMassupdate(true)
+                        ->save();
                 }
                 $this->_getSession()->addSuccess(
                     $this->__("Total of %d greeting cards were successfully updated.", count($greetingcardIds))
@@ -425,10 +428,10 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
         } else {
             try {
                 foreach ($greetingcardIds as $greetingcardId) {
-                $greetingcard = Mage::getSingleton("magentotest_greetingcard/greetingcard")->load($greetingcardId)
-                    ->setReason($this->getRequest()->getParam("flag_reason"))
-                    ->setIsMassupdate(true)
-                    ->save();
+                    $greetingcard = Mage::getSingleton("magentotest_greetingcard/greetingcard")->load($greetingcardId)
+                        ->setReason($this->getRequest()->getParam("flag_reason"))
+                        ->setIsMassupdate(true)
+                        ->save();
                 }
                 $this->_getSession()->addSuccess(
                     $this->__("Total of %d greeting cards were successfully updated.", count($greetingcardIds))
@@ -454,8 +457,8 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      */
     public function exportCsvAction()
     {
-        $fileName   = "greetingcard.csv";
-        $content    = $this->getLayout()->createBlock("magentotest_greetingcard/adminhtml_greetingcard_grid")
+        $fileName = "greetingcard.csv";
+        $content = $this->getLayout()->createBlock("magentotest_greetingcard/adminhtml_greetingcard_grid")
             ->getCsv();
         $this->_prepareDownloadResponse($fileName, $content);
     }
@@ -469,8 +472,8 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      */
     public function exportExcelAction()
     {
-        $fileName   = "greetingcard.xls";
-        $content    = $this->getLayout()->createBlock("magentotest_greetingcard/adminhtml_greetingcard_grid")
+        $fileName = "greetingcard.xls";
+        $content = $this->getLayout()->createBlock("magentotest_greetingcard/adminhtml_greetingcard_grid")
             ->getExcelFile();
         $this->_prepareDownloadResponse($fileName, $content);
     }
@@ -484,8 +487,8 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      */
     public function exportXmlAction()
     {
-        $fileName   = "greetingcard.xml";
-        $content    = $this->getLayout()->createBlock("magentotest_greetingcard/adminhtml_greetingcard_grid")
+        $fileName = "greetingcard.xml";
+        $content = $this->getLayout()->createBlock("magentotest_greetingcard/adminhtml_greetingcard_grid")
             ->getXml();
         $this->_prepareDownloadResponse($fileName, $content);
     }
@@ -517,20 +520,20 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
         $defStoreId = $website->getDefaultStore()->getId();
 
         $storeIds = $greetingCard->getStoreId();
-        if(!empty($storeIds))
+        if (!empty($storeIds))
             $websiteId = Mage::getModel('core/store')->load($storeIds[0])->getWebsiteId();
         else
             $websiteId = Mage::getModel('core/store')->load($defStoreId)->getWebsiteId();
         $customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($greetingCard->getCustomerEmail());
         $email = $customer->getEmail();
-        if(empty($email)) // in case of guest orders customer is not initialized
+        if (empty($email)) // in case of guest orders customer is not initialized
             $email = $greetingCard->getCustomerEmail();
         // get 'color' by reason number
-        if($greetingCard->getReason() == 1)
+        if ($greetingCard->getReason() == 1)
             $color = '<span style="color:#E5E4E2"><b>platinum</b></span>';
-        elseif($greetingCard->getReason() == 2)
+        elseif ($greetingCard->getReason() == 2)
             $color = '<span style="color:#D4AF37"><b>gold</b></span>';
-        elseif($greetingCard->getReason() == 3)
+        elseif ($greetingCard->getReason() == 3)
             $color = '<span style="color:#C0C0C0"><b>silver</b></span>';
         $emailTemplate = Mage::getModel('core/email_template');
         $emailTemplate->loadByCode('greeting_card_email');

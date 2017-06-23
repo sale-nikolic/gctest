@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * Greeting Card admin edit tabs
  *
@@ -43,24 +44,24 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Edit_Tabs extends Ma
         $this->addTab(
             'form_greetingcard',
             array(
-                'label'   => Mage::helper('magentotest_greetingcard')->__('Greeting Card'),
-                'title'   => Mage::helper('magentotest_greetingcard')->__('Greeting Card'),
+                'label' => Mage::helper('magentotest_greetingcard')->__('Greeting Card'),
+                'title' => Mage::helper('magentotest_greetingcard')->__('Greeting Card'),
                 'content' => $this->getLayout()->createBlock(
                     'magentotest_greetingcard/adminhtml_greetingcard_edit_tab_form'
                 )
-                ->toHtml(),
+                    ->toHtml(),
             )
         );
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addTab(
                 'form_store_greetingcard',
                 array(
-                    'label'   => Mage::helper('magentotest_greetingcard')->__('Store views'),
-                    'title'   => Mage::helper('magentotest_greetingcard')->__('Store views'),
+                    'label' => Mage::helper('magentotest_greetingcard')->__('Store views'),
+                    'title' => Mage::helper('magentotest_greetingcard')->__('Store views'),
                     'content' => $this->getLayout()->createBlock(
                         'magentotest_greetingcard/adminhtml_greetingcard_edit_tab_stores'
                     )
-                    ->toHtml(),
+                        ->toHtml(),
                 )
             );
         }

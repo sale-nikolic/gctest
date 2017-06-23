@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * GreetingCard default helper
  *
@@ -30,7 +31,8 @@ class MagentoTest_GreetingCard_Helper_Data extends Mage_Core_Helper_Abstract
         $converted = array();
         foreach ($options as $option) {
             if (isset($option['value']) && !is_array($option['value']) &&
-                isset($option['label']) && !is_array($option['label'])) {
+                isset($option['label']) && !is_array($option['label'])
+            ) {
                 $converted[$option['value']] = $option['label'];
             }
         }

@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * Greeting Card model
  *
@@ -21,7 +22,7 @@ class MagentoTest_GreetingCard_Model_Greetingcard extends Mage_Core_Model_Abstra
      * Entity code.
      * Can be used as part of method name for entity processing
      */
-    const ENTITY    = 'magentotest_greetingcard_greetingcard';
+    const ENTITY = 'magentotest_greetingcard_greetingcard';
     const CACHE_TAG = 'magentotest_greetingcard_greetingcard';
 
     /**
@@ -96,5 +97,5 @@ class MagentoTest_GreetingCard_Model_Greetingcard extends Mage_Core_Model_Abstra
 
         return $values;
     }
-    
+
 }

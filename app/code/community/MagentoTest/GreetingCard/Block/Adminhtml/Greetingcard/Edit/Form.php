@@ -1,13 +1,14 @@
 <?php
 /**
  * MagentoTest_GreetingCard extension
- * 
+ *
  * Magento Module for testing applicants.
- * 
+ *
  * @category       MagentoTest
  * @package        MagentoTest_GreetingCard
  * @copyright      Copyright (c) Company Inc.
  */
+
 /**
  * Greeting Card edit form
  *
@@ -28,15 +29,15 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Edit_Form extends Ma
     {
         $form = new Varien_Data_Form(
             array(
-                'id'         => 'edit_form',
-                'action'     => $this->getUrl(
+                'id' => 'edit_form',
+                'action' => $this->getUrl(
                     '*/*/save',
                     array(
                         'id' => $this->getRequest()->getParam('id')
                     )
                 ),
-                'method'     => 'post',
-                'enctype'    => 'multipart/form-data'
+                'method' => 'post',
+                'enctype' => 'multipart/form-data'
             )
         );
         $form->setUseContainer(true);
