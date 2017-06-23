@@ -114,6 +114,16 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
                         'caption' => Mage::helper('magentotest_greetingcard')->__('Edit'),
                         'url'     => array('base'=> '*/*/edit'),
                         'field'   => 'id'
+                    ),
+                    array(
+                        'caption' => Mage::helper('magentotest_greetingcard')->__('Delete'),
+                        'url'     => array('base'=> '*/*/delete'),
+                        'field'   => 'id'
+                    ),
+                    array(
+                        'caption' => Mage::helper('magentotest_greetingcard')->__('Send'),
+                        'url'     => array('base'=> '*/*/sendSingle'),
+                        'field'   => 'id'
                     )
                 ),
                 'filter'    => false,
