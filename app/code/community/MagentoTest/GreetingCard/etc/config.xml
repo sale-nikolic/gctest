@@ -82,8 +82,7 @@
             <adminhtml>
                 <args>
                     <modules>
-                        <MagentoTest_GreetingCard before="Mage_Adminhtml">MagentoTest_GreetingCard_Adminhtml
-                        </MagentoTest_GreetingCard>
+                        <MagentoTest_GreetingCard before="Mage_Adminhtml">MagentoTest_GreetingCard_Adminhtml</MagentoTest_GreetingCard>
                     </modules>
                 </args>
             </adminhtml>
