@@ -13,7 +13,7 @@
 <config>
     <modules>
         <MagentoTest_GreetingCard>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </MagentoTest_GreetingCard>
     </modules>
     <global>

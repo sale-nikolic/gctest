@@ -113,16 +113,35 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
             $email = $customer->getEmail();
             if(empty($email)) // in case of guest orders customer is not initialized
                 $email = $item->getCustomerEmail();
-            $item->delete();
-            $mail = Mage::getModel('core/email');
-            $mail->setToName($customer->getFirstname());
-            $mail->setToEmail($email);
-            $mail->setBody('Greetings from Example Store!\nThank you for being a great customer!');
-            $mail->setSubject('Thank you for being a great customer!');
-            $mail->setFromEmail('noreply@example.com');
-            $mail->setFromName("Example store");
-            $mail->setType('text');
-            $mail->send();
+            // get 'color' by reason number
+            if($item->getReason() == 1)
+                $color = '<span style="color:#E5E4E2"><b>platinum</b></span>';
+            elseif($item->getReason() == 2)
+                $color = '<span style="color:#D4AF37"><b>gold</b></span>';
+            elseif($item->getReason() == 3)
+                $color = '<span style="color:#C0C0C0"><b>silver</b></span>';
+            $emailTemplate = Mage::getModel('core/email_template');
+            $emailTemplate->loadByCode('greeting_card_email');
+            if(!$emailTemplate->getTemplateId()){
+                continue;
+            }
+            $processedTemplate = $emailTemplate->getProcessedTemplate(array('name' => $customer->getFirstname(), 'color' => $color));
+            $mail = Mage::getModel('core/email')
+                ->setToName($customer->getFirstname())
+                ->setToEmail($email)
+                ->setFromEmail('noreply@example.com')
+                ->setFromName("Example store")
+                ->setBody($processedTemplate)
+                ->setSubject($emailTemplate->getTemplateSubject())
+                ->setType('html');
+
+            try {
+                $mail->send();
+                $item->delete();
+            } catch (Exception $error) {
+                Mage::log($error->getMessage(), null, 'greeting_card_emails.log');
+                continue;
+            }
         }
         $this->_redirect("*/*/");
     }
@@ -314,18 +333,36 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
                     $email = $customer->getEmail();
                     if(empty($email)) // in case of guest orders customer is not initialized
                         $email = $gc->getCustomerEmail();
-                    $gc->delete();
-
-                    $mail = Mage::getModel('core/email');
-                    $mail->setToName($customer->getFirstname());
-                    $mail->setToEmail($email);
-                    $mail->setBody('Greetings from Example Store!\nThank you for being a great customer!');
-                    $mail->setSubject('Thank you for being a great customer!');
-                    $mail->setFromEmail('noreply@example.com');
-                    $mail->setFromName("Example store");
-                    $mail->setType('text');
-                    $mail->send();
+                    // get 'color' by reason number
+                    if($gc->getReason() == 1)
+                        $color = '<span style="color:#E5E4E2"><b>platinum</b></span>';
+                    elseif($gc->getReason() == 2)
+                        $color = '<span style="color:#D4AF37"><b>gold</b></span>';
+                    elseif($gc->getReason() == 3)
+                        $color = '<span style="color:#C0C0C0"><b>silver</b></span>';
+                    $emailTemplate = Mage::getModel('core/email_template');
+                    $emailTemplate->loadByCode('greeting_card_email');
+                    if(!$emailTemplate->getTemplateId()){
+                        continue;
                     }
+                    $processedTemplate = $emailTemplate->getProcessedTemplate(array('name' => $customer->getFirstname(), 'color' => $color));
+                    $mail = Mage::getModel('core/email')
+                        ->setToName($customer->getFirstname())
+                        ->setToEmail($email)
+                        ->setFromEmail('noreply@example.com')
+                        ->setFromName("Example store")
+                        ->setBody($processedTemplate)
+                        ->setSubject($emailTemplate->getTemplateSubject())
+                        ->setType('html');
+
+                    try {
+                        $mail->send();
+                        $gc->delete();
+                    } catch (Exception $error) {
+                        Mage::log($error->getMessage(), null, 'greeting_card_emails.log');
+                        continue;
+                    }
+                }
                 Mage::getSingleton("adminhtml/session")->addSuccess(
                     Mage::helper("magentotest_greetingcard")->__("Total of %d greeting cards were successfully sent.", count($greetingcardIds))
                 );
