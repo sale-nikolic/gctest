@@ -138,6 +138,13 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('greetingcard');
         $this->getMassactionBlock()->addItem(
+            'send',
+            array(
+                'label'=> Mage::helper('magentotest_greetingcard')->__('Send'),
+                'url'  => $this->getUrl('*/*/massSend')
+            )
+        );
+        $this->getMassactionBlock()->addItem(
             'delete',
             array(
                 'label'=> Mage::helper('magentotest_greetingcard')->__('Delete'),
@@ -145,6 +152,7 @@ class MagentoTest_GreetingCard_Block_Adminhtml_Greetingcard_Grid extends Mage_Ad
                 'confirm'  => Mage::helper('magentotest_greetingcard')->__('Are you sure?')
             )
         );
+
         $this->getMassactionBlock()->addItem(
             'status',
             array(

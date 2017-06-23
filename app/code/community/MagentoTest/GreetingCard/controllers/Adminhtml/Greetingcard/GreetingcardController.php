@@ -59,7 +59,7 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
         foreach($collection as $customer){
             $customerValue[$customer->getEmail()] = array('total' => $customer->getGrandTotal(), 'stores' => $customer->getStores());
         }
-        $write_adapter =Mage::getSingleton('core/resource')->getConnection('core_write');
+        $write_adapter = Mage::getSingleton('core/resource')->getConnection('core_write');
         // save to database based on values
         foreach($customerValue as $email => $totalValue) {
             $reason = null;
@@ -76,7 +76,7 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
             $item->setData("customer_email", $email);
             $item->setData("reason", $reason);
             $item->save();
-            //save card(customer) stores
+            //save customer order stores
             $table  = Mage::getSingleton('core/resource')->getTableName('magentotest_greetingcard/greetingcard_store');
             $store = strtok($totalValue['stores'], ',');
             $data = [];
@@ -100,24 +100,23 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
      */
     public function sendAction() {
         $collection = Mage::getModel("magentotest_greetingcard/greetingcard")->getCollection();
-
+        //get default store id
+        $website = array_values(Mage::app()->getWebsites())[0];
+        $defStoreId = $website->getDefaultStore()->getId();
         foreach($collection as $item) {
-            $selectedCustomerId = null;
-            $customers = Mage::getModel("customer/customer")->getCollection();
-            foreach($customers as $customer) {
-                if($customer->getEmail() == $item->getCustomerEmail()) {
-                    $selectedCustomerId = $customer->getId();
-                }
-            }
-            if($selectedCustomerId) {
-                $customer = Mage::getModel("customer/customer")->load($selectedCustomerId);
-            }
-
+            $storeIds = $item->getStoreId();
+            if(!empty($storeIds))
+                $websiteId = Mage::getModel('core/store')->load($storeIds[0])->getWebsiteId();
+            else
+                $websiteId = Mage::getModel('core/store')->load($defStoreId)->getWebsiteId();
+            $customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($item->getCustomerEmail());
+            $email = $customer->getEmail();
+            if(empty($email)) // in case of guest orders customer is not initialized
+                $email = $item->getCustomerEmail();
             $item->delete();
-
             $mail = Mage::getModel('core/email');
             $mail->setToName($customer->getFirstname());
-            $mail->setToEmail($customer->getEmail());
+            $mail->setToEmail($email);
             $mail->setBody('Greetings from Example Store!\nThank you for being a great customer!');
             $mail->setSubject('Thank you for being a great customer!');
             $mail->setFromEmail('noreply@example.com');
@@ -283,6 +282,63 @@ class MagentoTest_GreetingCard_Adminhtml_Greetingcard_GreetingcardController ext
             Mage::helper("magentotest_greetingcard")->__("Could not find greeting card to delete.")
         );
         $this->_redirect("*/*/");
+    }
+
+    /**
+     * mass send greeting card - action
+     *
+     * @access public
+     * @return void
+     * @author Company Inc.
+     */
+    public function massSendAction()
+    {
+        $greetingcardIds = $this->getRequest()->getParam("greetingcard");
+        if (!is_array($greetingcardIds)) {
+            Mage::getSingleton("adminhtml/session")->addError(
+                Mage::helper("magentotest_greetingcard")->__("Please select greeting cards to send.")
+            );
+        } else {
+            try {
+                //get default store id
+                $website = array_values(Mage::app()->getWebsites())[0];
+                $defStoreId = $website->getDefaultStore()->getId();
+                foreach ($greetingcardIds as $greetingcardId) {
+                    $gc = Mage::getModel("magentotest_greetingcard/greetingcard")->load($greetingcardId);
+                    $storeIds = $gc->getStoreId();
+                    if(!empty($storeIds))
+                        $websiteId = Mage::getModel('core/store')->load($storeIds[0])->getWebsiteId();
+                    else
+                        $websiteId = Mage::getModel('core/store')->load($defStoreId)->getWebsiteId();
+                    $customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($gc->getCustomerEmail());
+                    $email = $customer->getEmail();
+                    if(empty($email)) // in case of guest orders customer is not initialized
+                        $email = $gc->getCustomerEmail();
+                    $gc->delete();
+
+                    $mail = Mage::getModel('core/email');
+                    $mail->setToName($customer->getFirstname());
+                    $mail->setToEmail($email);
+                    $mail->setBody('Greetings from Example Store!\nThank you for being a great customer!');
+                    $mail->setSubject('Thank you for being a great customer!');
+                    $mail->setFromEmail('noreply@example.com');
+                    $mail->setFromName("Example store");
+                    $mail->setType('text');
+                    $mail->send();
+                    }
+                Mage::getSingleton("adminhtml/session")->addSuccess(
+                    Mage::helper("magentotest_greetingcard")->__("Total of %d greeting cards were successfully sent.", count($greetingcardIds))
+                );
+            } catch (Mage_Core_Exception $e) {
+                Mage::getSingleton("adminhtml/session")->addError($e->getMessage());
+            } catch (Exception $e) {
+                Mage::getSingleton("adminhtml/session")->addError(
+                    Mage::helper("magentotest_greetingcard")->__("There was an error sending greeting cards.")
+                );
+                Mage::logException($e);
+            }
+        }
+        $this->_redirect("*/*/index");
     }
 
     /**
